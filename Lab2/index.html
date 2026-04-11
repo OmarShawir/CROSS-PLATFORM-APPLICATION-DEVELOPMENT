@@ -90,7 +90,21 @@
         </header>
 
         <div class="grid">
-            <div class="card" id="left-panel">LEFT</div>
+            <div class="card" id="left-panel">
+                <div class="card" id="left-panel">
+                    <h2>Add a note</h2>
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" id="noteTitle" placeholder="e.g., DOM practice">
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea id="noteContent" rows="2" placeholder="Write something..."></textarea>
+                    </div>
+                    <button id="addNoteBtn">+ Add Note</button>
+                    <div class="counter" id="noteCounter">0 notes</div>
+                </div>
+            </div>
             <div class="card" id="right-panel">RIGHT</div>
         </div>
 
