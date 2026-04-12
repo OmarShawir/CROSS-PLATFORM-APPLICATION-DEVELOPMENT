@@ -256,5 +256,12 @@
             const count = notes.length;
             noteCounterSpan.textContent = count === 1 ? "1 note" : `${count} notes`;
         }
+        function renderNotes() {
+            // Clear container safely (no innerHTML)
+            while (notesContainer.firstChild) {
+                notesContainer.removeChild(notesContainer.firstChild);
+            }
+            // (بقية الدالة ستضاف في الخطوات القادمة)
+        }
     </script>
 </body>
