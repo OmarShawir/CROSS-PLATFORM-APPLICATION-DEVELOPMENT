@@ -272,6 +272,38 @@
                 updateCounter();
                 return;
             }
+            notes.forEach(note => {
+                // wrapper div
+                const noteDiv = document.createElement("div");
+                noteDiv.classList.add("note-item");
+                noteDiv.setAttribute("data-id", note.id);
+
+                // title row
+                const titleDiv = document.createElement("div");
+                titleDiv.classList.add("note-title");
+                const titleSpan = document.createElement("span");
+                titleSpan.textContent = note.title;
+
+                // delete button
+                const deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.classList.add("delete-note");
+                deleteBtn.setAttribute("data-action", "delete");
+                deleteBtn.setAttribute("data-id", note.id);
+
+                titleDiv.appendChild(titleSpan);
+                titleDiv.appendChild(deleteBtn);
+
+                // content paragraph
+                const contentP = document.createElement("p");
+                contentP.classList.add("note-content");
+                contentP.textContent = note.content || "(no additional content)";
+
+                noteDiv.appendChild(titleDiv);
+                noteDiv.appendChild(contentP);
+                notesContainer.appendChild(noteDiv);
+            });
+            updateCounter();
 
         }
     </script>
