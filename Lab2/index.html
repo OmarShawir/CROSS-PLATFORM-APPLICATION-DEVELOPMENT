@@ -261,7 +261,18 @@
             while (notesContainer.firstChild) {
                 notesContainer.removeChild(notesContainer.firstChild);
             }
-            // (بقية الدالة ستضاف في الخطوات القادمة)
+            // empty-state message
+            if (notes.length === 0) {
+                const emptyMsg = document.createElement("div");
+                emptyMsg.textContent = "No notes yet. Add your first note!";
+                emptyMsg.style.color = "#94a3b8";
+                emptyMsg.style.textAlign = "center";
+                emptyMsg.style.padding = "1rem";
+                notesContainer.appendChild(emptyMsg);
+                updateCounter();
+                return;
+            }
+
         }
     </script>
 </body>
