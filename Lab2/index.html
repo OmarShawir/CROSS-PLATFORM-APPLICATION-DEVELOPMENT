@@ -311,6 +311,12 @@
                 notesContainer.appendChild(noteDiv);
             });
             updateCounter();
+            const editBtn = document.createElement("button");
+            editBtn.textContent = "Edit";
+            editBtn.setAttribute("data-action", "edit");
+            editBtn.setAttribute("data-id", note.id);
+            editBtn.style.marginRight = "5px";
+            titleDiv.appendChild(editBtn);
 
         }
 
@@ -362,6 +368,18 @@
                 const id = parseInt(btn.getAttribute("data-id"), 10);
                 deleteNoteById(id);
             }
+            const editTarget = e.target.closest('[data-action="edit"]');
+            if (editTarget) {
+                const id = parseInt(editTarget.getAttribute("data-id"), 10);
+                const found = notes.find(n => n.id === id);
+                if (found) {
+                    const newTitle = prompt("New title:", found.title);
+                    if (newTitle !== null && newTitle.trim() !== "") {
+                        found.title = newTitle.trim();
+                        renderNotes();
+                    }
+                }
+            }
         });
 
         function updateWindowSize() {
@@ -394,5 +412,51 @@
         }
 
         init();
+
+        // Step 30: Bonus - Show a screen-size category with BOM [cite: 500]
+        function updateWindowSize() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            let category;
+
+            if (w < 480) category = "Mobile";
+            else if (w < 1024) category = "Tablet";
+            else category = "Desktop";
+
+            windowSizeSpan.textContent = `${w} x ${h} px (${category})`; // [cite: 514]
+        }
+
+        window.addEventListener("resize", updateWindowSize); // [cite: 390]
+
+        function showUserAgent() {
+            let agent = navigator.userAgent;
+            if (agent.length > 55) agent = agent.slice(0, 52) + "..."; // [cite: 398, 399]
+            userAgentSpan.textContent = agent;
+        }
+
+        function addSampleNotes() {
+            if (notes.length === 0) {
+                notes.push(
+                    { id: nextId++, title: "Hello BOM", content: "Try resizing the window watch width/height update!" }, // [cite: 411, 412, 414]
+                    { id: nextId++, title: "Delete me", content: "Click delete and confirm the BOM confirm box." } // [cite: 417, 418, 419]
+                );
+                renderNotes();
+            }
+        }
+
+        function init() {
+            addSampleNotes();
+            updateWindowSize();
+            showUserAgent();
+
+            // Step 29: Bonus - Add keyboard shortcut (Enter to add) [cite: 489, 490]
+            titleInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    addNote(); // [cite: 493, 495]
+                }
+            });
+        }
+
+        init(); // [cite: 431]
     </script>
 </body>
