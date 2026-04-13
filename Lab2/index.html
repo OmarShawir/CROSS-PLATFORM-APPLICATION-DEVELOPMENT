@@ -353,5 +353,14 @@
                 deleteNoteById(id);
             }
         });
+
+        function updateWindowSize() {
+            const w = window.innerWidth;[cite: 383, 385]
+            const h = window.innerHeight;[cite: 383, 385]
+            windowSizeSpan.textContent = `${w} x ${h} px`;[cite: 383]
+        }
+
+        // التحديث عند تغيير حجم المتصفح [cite: 389, 390]
+        window.addEventListener("resize", updateWindowSize);
     </script>
 </body>
