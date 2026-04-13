@@ -359,8 +359,11 @@
             const h = window.innerHeight;[cite: 383, 385]
             windowSizeSpan.textContent = `${w} x ${h} px`;[cite: 383]
         }
-
-        // التحديث عند تغيير حجم المتصفح [cite: 389, 390]
         window.addEventListener("resize", updateWindowSize);
+        function showUserAgent() {
+            let agent = navigator.userAgent;[cite: 398, 404]
+            if (agent.length > 55) agent = agent.slice(0, 52) + "...";
+            userAgentSpan.textContent = agent;[cite: 400]
+        }
     </script>
 </body>
