@@ -247,8 +247,9 @@
     </footer>
     <script>
         // State
-        let notes = []; // stores every note object: { id, title, content }
-        let nextId = 1; // gives each note a unique ID
+        let notes = [];
+        let nextId = 1;
+
         // DOM REFERENCES
         const notesContainer = document.getElementById("notesContainer");
         const titleInput = document.getElementById("noteTitle");
@@ -263,12 +264,14 @@
             const count = notes.length;
             noteCounterSpan.textContent = count === 1 ? "1 note" : `${count} notes`;
         }
+
         function renderNotes() {
-            // Clear container safely (no innerHTML)
+            // Clear container safely
             while (notesContainer.firstChild) {
                 notesContainer.removeChild(notesContainer.firstChild);
             }
-            // empty-state message
+
+            // Empty-state message
             if (notes.length === 0) {
                 const emptyMsg = document.createElement("div");
                 emptyMsg.textContent = "No notes yet. Add your first note!";
@@ -279,29 +282,40 @@
                 updateCounter();
                 return;
             }
+
             notes.forEach(note => {
-                // wrapper div
                 const noteDiv = document.createElement("div");
                 noteDiv.classList.add("note-item");
                 noteDiv.setAttribute("data-id", note.id);
 
-                // title row
                 const titleDiv = document.createElement("div");
                 titleDiv.classList.add("note-title");
+
                 const titleSpan = document.createElement("span");
                 titleSpan.textContent = note.title;
 
-                // delete button
+                // Edit Button
+                const editBtn = document.createElement("button");
+                editBtn.textContent = "Edit";
+                editBtn.setAttribute("data-action", "edit");
+                editBtn.setAttribute("data-id", note.id);
+                editBtn.style.marginRight = "5px";
+
+                // Delete Button
                 const deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "Delete";
                 deleteBtn.classList.add("delete-note");
                 deleteBtn.setAttribute("data-action", "delete");
                 deleteBtn.setAttribute("data-id", note.id);
 
-                titleDiv.appendChild(titleSpan);
-                titleDiv.appendChild(deleteBtn);
+                // Container for buttons to keep them together on the right
+                const btnContainer = document.createElement("div");
+                btnContainer.appendChild(editBtn);
+                btnContainer.appendChild(deleteBtn);
 
-                // content paragraph
+                titleDiv.appendChild(titleSpan);
+                titleDiv.appendChild(btnContainer);
+
                 const contentP = document.createElement("p");
                 contentP.classList.add("note-content");
                 contentP.textContent = note.content || "(no additional content)";
@@ -311,18 +325,10 @@
                 notesContainer.appendChild(noteDiv);
             });
             updateCounter();
-            const editBtn = document.createElement("button");
-            editBtn.textContent = "Edit";
-            editBtn.setAttribute("data-action", "edit");
-            editBtn.setAttribute("data-id", note.id);
-            editBtn.style.marginRight = "5px";
-            titleDiv.appendChild(editBtn);
-
         }
 
         function addNote() {
             const title = titleInput.value.trim();
-            // BOM: alert() validation
             if (title === "") {
                 alert("❌ Title cannot be empty!");
                 titleInput.focus();
@@ -331,13 +337,13 @@
             const content = contentInput.value.trim();
             notes.push({ id: nextId++, title, content });
             renderNotes();
-            // clear and refocus
+
             titleInput.value = "";
             contentInput.value = "";
             titleInput.focus();
         }
+
         function deleteNoteById(id) {
-            // BOM: confirm() returns true/false
             const ok = confirm("Are you sure you want to delete this note?");
             if (!ok) return;
 
@@ -347,6 +353,7 @@
                 renderNotes();
             }
         }
+
         function clearAllNotes() {
             if (notes.length === 0) {
                 alert("No notes to clear.");
@@ -360,17 +367,22 @@
                 alert("All notes have been cleared.");
             }
         }
+
+        // Event Listeners for Add and Clear buttons
         addBtn.addEventListener("click", addNote);
         clearAllBtn.addEventListener("click", clearAllNotes);
+
+        // Event Delegation for Delete and Edit buttons
         notesContainer.addEventListener("click", (e) => {
-            const btn = e.target.closest('[data-action="delete"]');
-            if (btn) {
-                const id = parseInt(btn.getAttribute("data-id"), 10);
+            const deleteBtn = e.target.closest('[data-action="delete"]');
+            if (deleteBtn) {
+                const id = parseInt(deleteBtn.getAttribute("data-id"), 10);
                 deleteNoteById(id);
             }
-            const editTarget = e.target.closest('[data-action="edit"]');
-            if (editTarget) {
-                const id = parseInt(editTarget.getAttribute("data-id"), 10);
+
+            const editBtn = e.target.closest('[data-action="edit"]');
+            if (editBtn) {
+                const id = parseInt(editBtn.getAttribute("data-id"), 10);
                 const found = notes.find(n => n.id === id);
                 if (found) {
                     const newTitle = prompt("New title:", found.title);
@@ -382,38 +394,7 @@
             }
         });
 
-        function updateWindowSize() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            windowSizeSpan.textContent = `${w} x ${h} px`;
-        }
-
-        window.addEventListener("resize", updateWindowSize);
-        function showUserAgent() {
-            let agent = navigator.userAgent;
-            if (agent.length > 55) agent = agent.slice(0, 52) + "...";
-            userAgentSpan.textContent = agent;
-        }
-
-        function addSampleNotes() {
-            if (notes.length === 0) {
-                notes.push(
-                    { id: nextId++, title: "Hello BOM", content: "Try resizing the window watch width/height update!" }, [cite: 411, 412, 414]
-            { id: nextId++, title: "Delete me", content: "Click delete and confirm the BOM confirm box." }[cite: 417, 418, 419]
-                );
-                renderNotes();
-            }
-        }
-
-        function init() {
-            addSampleNotes();
-            updateWindowSize();
-            showUserAgent();
-        }
-
-        init();
-
-        // Step 30: Bonus - Show a screen-size category with BOM [cite: 500]
+        // BOM Features
         function updateWindowSize() {
             const w = window.innerWidth;
             const h = window.innerHeight;
@@ -423,40 +404,43 @@
             else if (w < 1024) category = "Tablet";
             else category = "Desktop";
 
-            windowSizeSpan.textContent = `${w} x ${h} px (${category})`; // [cite: 514]
+            windowSizeSpan.textContent = `${w} x ${h} px (${category})`;
         }
 
-        window.addEventListener("resize", updateWindowSize); // [cite: 390]
+        window.addEventListener("resize", updateWindowSize);
 
         function showUserAgent() {
             let agent = navigator.userAgent;
-            if (agent.length > 55) agent = agent.slice(0, 52) + "..."; // [cite: 398, 399]
+            if (agent.length > 55) agent = agent.slice(0, 52) + "...";
             userAgentSpan.textContent = agent;
         }
 
         function addSampleNotes() {
             if (notes.length === 0) {
                 notes.push(
-                    { id: nextId++, title: "Hello BOM", content: "Try resizing the window watch width/height update!" }, // [cite: 411, 412, 414]
-                    { id: nextId++, title: "Delete me", content: "Click delete and confirm the BOM confirm box." } // [cite: 417, 418, 419]
+                    { id: nextId++, title: "Hello BOM", content: "Try resizing the window watch width/height update!" },
+                    { id: nextId++, title: "Delete me", content: "Click delete and confirm the BOM confirm box." }
                 );
                 renderNotes();
             }
         }
 
+        // Initialisation
         function init() {
             addSampleNotes();
             updateWindowSize();
             showUserAgent();
 
-            // Step 29: Bonus - Add keyboard shortcut (Enter to add) [cite: 489, 490]
+            // Bonus: Add keyboard shortcut (Enter to add)
             titleInput.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
-                    addNote(); // [cite: 493, 495]
+                    addNote();
                 }
             });
         }
 
-        init(); // [cite: 431]
+        init(); 
     </script>
 </body>
+
+</html>
