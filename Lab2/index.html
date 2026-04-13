@@ -306,5 +306,21 @@
             updateCounter();
 
         }
+        function addNote() {
+            const title = titleInput.value.trim();
+            // BOM: alert() validation
+            if (title === "") {
+                alert("❌ Title cannot be empty!");
+                titleInput.focus();
+                return;
+            }
+            const content = contentInput.value.trim();
+            notes.push({ id: nextId++, title, content });
+            renderNotes();
+            // clear and refocus
+            titleInput.value = "";
+            contentInput.value = "";
+            titleInput.focus();
+        }
     </script>
 </body>
