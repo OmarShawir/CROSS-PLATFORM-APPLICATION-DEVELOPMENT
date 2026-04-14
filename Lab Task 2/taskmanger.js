@@ -76,3 +76,26 @@ function addTask(columnId, taskData) {
     }
     updateCounters();
 }
+
+function editTask(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
+    titleInput.value = task.title;
+    descInput.value = task.desc;
+    priorityInput.value = task.priority;
+    dueInput.value = task.due || '';
+    currentEditId = taskId;
+    modalTitle.textContent = 'Edit Task';
+    taskModal.classList.remove('hidden');
+}
+
+function updateTask(taskId, updatedData) {
+    const taskIndex = tasks.findIndex(t => t.id === taskId);
+    if (taskIndex === -1) return;
+    Object.assign(tasks[taskIndex], updatedData);
+    const oldCard = document.querySelector(`.task-card[data-id="${taskId}"]`);
+    if (oldCard) {
+        const newCard = createTaskCard(tasks[taskIndex]);
+        oldCard.replaceWith(newCard);
+    }
+}
