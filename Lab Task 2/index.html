@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Task Board</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="header-left">
+            <h1 class="app-title">📋 My Task Board</h1>
+            <span id="task-counter" class="task-counter">0 tasks</span>
+        </div>
+        <div class="header-right">
+            <label for="priority-filter" class="filter-label">Filter:</label>
+            <select id="priority-filter" class="filter-select">
+                <option value="all">All Priorities</option>
+                <option value="high">🔴 High</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="low">🟢 Low</option>
+            </select>
+        </div>
+    </header>
+
+    <main class="board">
+        <section class="column" id="todo">
+            <div class="column-header">
+                <h2 class="column-title">📌 To Do</h2>
+                <span class="column-count" id="todo-count">0</span>
+            </div>
+            <ul class="task-list" id="todo-list"></ul>
+            <button class="btn-add" data-col="todo">+ Add Task</button>
+        </section>
+
+        <section class="column" id="inprogress">
+            <div class="column-header">
+                <h2 class="column-title">⚙️ In Progress</h2>
+                <span class="column-count" id="inprogress-count">0</span>
+            </div>
+            <ul class="task-list" id="inprogress-list"></ul>
+            <button class="btn-add" data-col="inprogress">+ Add Task</button>
+        </section>
+
+        <section class="column" id="done">
+            <div class="column-header">
+                <h2 class="column-title">✅ Done</h2>
+                <span class="column-count" id="done-count">0</span>
+            </div>
+            <ul class="task-list" id="done-list"></ul>
+            <div class="column-footer">
+                <button class="btn-add" data-col="done">+ Add Task</button>
+                <button class="btn-clear" id="clear-done">🗑 Clear All</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay hidden" id="modal-overlay">
+        <div class="modal" id="task-modal">
+            <h2 class="modal-heading" id="modal-heading">Add Task</h2>
+
+            <label class="modal-label">Title <span class="required">*</span></label>
+            <input class="modal-input" type="text" id="input-title" placeholder="Task title...">
+
+            <label class="modal-label">Description</label>
+            <textarea class="modal-input modal-textarea" id="input-desc" placeholder="Optional details..."
+                rows="3"></textarea>
+
+            <label class="modal-label">Priority</label>
+            <select class="modal-input" id="input-priority">
+                <option value="high">🔴 High</option>
+                <option value="medium" selected>🟡 Medium</option>
+                <option value="low">🟢 Low</option>
+            </select>
+
+            <label class="modal-label">Due Date</label>
+            <input class="modal-input" type="date" id="input-due">
+
+            <div class="modal-actions">
+                <button class="btn-save" id="btn-save">Save</button>
+                <button class="btn-cancel" id="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="taskmanager.js"></script>
+</body>
+
+</html>
