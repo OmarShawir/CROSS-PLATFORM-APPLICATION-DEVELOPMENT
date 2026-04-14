@@ -86,7 +86,7 @@ function editTask(taskId) {
     dueInput.value = task.due || '';
     currentEditId = taskId;
     modalTitle.textContent = 'Edit Task';
-    taskModal.classList.remove('hidden');
+    modalOverlay.classList.remove('hidden');
 }
 
 function updateTask(taskId, updatedData) {
@@ -98,4 +98,116 @@ function updateTask(taskId, updatedData) {
         const newCard = createTaskCard(tasks[taskIndex]);
         oldCard.replaceWith(newCard);
     }
+}
+
+document.getElementById('btn-save').addEventListener('click', () => {
+    const title = titleInput.value.trim();
+    if (!title) {
+        alert('Task title is required!');
+        return;
+    }
+
+    const taskData = {
+        title: title,
+        desc: descInput.value.trim(),
+        priority: priorityInput.value,
+        due: dueInput.value
+    };
+
+    if (currentEditId) {
+        updateTask(currentEditId, taskData);
+    } else {
+        addTask(currentTargetColumn, taskData);
+    }
+
+    modalOverlay.classList.add('hidden');
+});
+
+document.getElementById('btn-cancel').addEventListener('click', () => {
+    modalOverlay.classList.add('hidden');
+});
+
+modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+        modalOverlay.classList.add('hidden');
+    }
+});
+
+document.querySelectorAll('.btn-add').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        currentTargetColumn = e.target.getAttribute('data-col');
+        currentEditId = null;
+        titleInput.value = descInput.value = dueInput.value = '';
+        priorityInput.value = 'medium';
+        modalHeading.textContent = 'Add Task';
+        modalOverlay.classList.remove('hidden');
+        titleInput.focus();
+    });
+});
+
+['todo', 'inprogress', 'done'].forEach(col => {
+    const list = document.getElementById(`${col}-list`);
+    list.addEventListener('click', (e) => {
+        const action = e.target.getAttribute('data-action');
+        if (!action) return;
+        const id = parseInt(e.target.getAttribute('data-id'), 10);
+        if (action === 'delete') deleteTask(id);
+        if (action === 'edit') {
+            modalOverlay.classList.remove('hidden');
+            editTask(id);
+        }
+    });
+
+    list.addEventListener('dblclick', (e) => {
+        const titleSpan = e.target.closest('.task-title');
+        if (!titleSpan) return;
+        const card = titleSpan.closest('.task-card');
+        const taskId = parseInt(card.getAttribute('data-id'), 10);
+        const task = tasks.find(t => t.id === taskId);
+        const input = document.createElement('input');
+        input.className = 'inline-edit-input';
+        input.value = task.title;
+        card.replaceChild(input, titleSpan);
+        input.focus();
+        const saveInline = () => {
+            task.title = input.value.trim() || task.title;
+            titleSpan.textContent = task.title;
+            card.replaceChild(titleSpan, input);
+        };
+
+        input.addEventListener('blur', saveInline);
+        input.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Enter') saveInline();
+        });
+    });
+});
+
+filterSelect.addEventListener('change', () => {
+    const selected = filterSelect.value;
+    document.querySelectorAll('.task-card').forEach(card => {
+        const priority = card.getAttribute('data-priority');
+        card.classList.toggle('is-hidden', selected !== 'all' && priority !== selected);
+    });
+});
+
+document.getElementById('clear-done').addEventListener('click', () => {
+    const doneCards = Array.from(document.getElementById('done-list').children);
+    doneCards.forEach((card, index) => {
+        const taskId = parseInt(card.getAttribute('data-id'), 10);
+        setTimeout(() => {
+            deleteTask(taskId);
+        }, index * 100);
+    });
+});
+
+function deleteTask(taskId) {
+    const card = document.querySelector(`.task-card[data-id="${taskId}"]`);
+    if (!card) return;
+
+    card.classList.add('fade-out');
+    setTimeout(() => {
+        card.remove();
+        tasks = tasks.filter(t => t.id !== taskId);
+        updateCounters();
+    }, 300);
 }
