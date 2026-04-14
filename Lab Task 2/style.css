@@ -1,0 +1,476 @@
+/* 
+   KANBAN TASK BOARD — style.css
+   Sections:
+   1. Reset & CSS Variables
+   2. Layout — Header & Board
+   3. Column styles
+   4. Task Card styles
+   5. Priority badges
+   6. Modal styles
+   7. Buttons
+   8. Utility classes (hidden, is-hidden, fade-out)
+ */
+
+/*  1. Reset & CSS Variables  */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --color-bg: #f0f2f5;
+    --color-surface: #ffffff;
+    --color-border: #dde1e7;
+    --color-text: #1a1d23;
+    --color-muted: #6b7280;
+    --color-accent: #4f46e5;
+    --color-accent-hover: #4338ca;
+
+    /* Priority colours */
+    --color-high: #ef4444;
+    --color-medium: #f59e0b;
+    --color-low: #22c55e;
+
+    /* Column accent colours */
+    --col-todo: #6366f1;
+    --col-inprogress: #f59e0b;
+    --col-done: #22c55e;
+
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    --transition: .2s ease;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+}
+
+/* ─── 2. Header ─────────────────────────────── */
+.app-header {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.app-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+/* Total task counter badge */
+.task-counter {
+    background: var(--color-accent);
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.filter-label {
+    font-size: .875rem;
+    color: var(--color-muted);
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: .4rem .75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: .875rem;
+    cursor: pointer;
+    background: var(--color-surface);
+    color: var(--color-text);
+}
+
+/* ─── 3. Board & Column layout ──────────────── */
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .board {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+}
+
+.column {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    padding: 1rem;
+    min-height: 300px;
+}
+
+/* Colour accent on top of each column */
+#todo {
+    border-top: 4px solid var(--col-todo);
+}
+
+#inprogress {
+    border-top: 4px solid var(--col-inprogress);
+}
+
+#done {
+    border-top: 4px solid var(--col-done);
+}
+
+.column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.column-title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Per-column task count badge */
+.column-count {
+    background: var(--color-bg);
+    color: var(--color-muted);
+    font-size: .75rem;
+    font-weight: 600;
+    padding: .2rem .55rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+}
+
+.task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    flex: 1;
+}
+
+.column-footer {
+    display: flex;
+    gap: .5rem;
+}
+
+/* ─── 4. Task Card ───────────────────────────── */
+.task-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: .75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    transition: box-shadow var(--transition), transform var(--transition);
+    cursor: default;
+}
+
+.task-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .1);
+    transform: translateY(-1px);
+}
+
+/* Title — double-click to edit */
+.task-title {
+    font-size: .95rem;
+    font-weight: 600;
+    cursor: pointer;
+    word-break: break-word;
+}
+
+.task-title:hover {
+    color: var(--color-accent);
+}
+
+/* Inline edit input that replaces the title span */
+.inline-edit-input {
+    font-size: .95rem;
+    font-weight: 600;
+    border: 2px solid var(--color-accent);
+    border-radius: 6px;
+    padding: .15rem .4rem;
+    width: 100%;
+    outline: none;
+}
+
+.task-desc {
+    font-size: .8rem;
+    color: var(--color-muted);
+    word-break: break-word;
+}
+
+.task-due {
+    font-size: .75rem;
+    color: var(--color-muted);
+}
+
+/* Card action buttons row */
+.task-actions {
+    display: flex;
+    gap: .4rem;
+    margin-top: .25rem;
+}
+
+/* ─── 5. Priority Badges ────────────────────── */
+.priority-badge {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    padding: .15rem .5rem;
+    border-radius: 999px;
+    width: fit-content;
+}
+
+.priority-high {
+    background: #fee2e2;
+    color: var(--color-high);
+}
+
+.priority-medium {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.priority-low {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+/* ─── 6. Modal ───────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.modal {
+    background: var(--color-surface);
+    border-radius: var(--radius);
+    padding: 2rem;
+    width: 90%;
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .2);
+}
+
+.modal-heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: .25rem;
+}
+
+.modal-label {
+    font-size: .875rem;
+    font-weight: 600;
+    color: var(--color-muted);
+}
+
+.required {
+    color: var(--color-high);
+}
+
+.modal-input {
+    width: 100%;
+    padding: .5rem .75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: .9rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background: var(--color-bg);
+    transition: border-color var(--transition);
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
+.modal-textarea {
+    resize: vertical;
+}
+
+.modal-error {
+    color: var(--color-high);
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+.modal-actions {
+    display: flex;
+    gap: .75rem;
+    margin-top: .5rem;
+}
+
+/* ─── 7. Buttons ─────────────────────────────── */
+/* Add Task button */
+.btn-add {
+    background: none;
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius);
+    padding: .5rem;
+    font-size: .85rem;
+    color: var(--color-muted);
+    cursor: pointer;
+    width: 100%;
+    transition: border-color var(--transition), color var(--transition);
+}
+
+.btn-add:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+/* Clear Done button */
+.btn-clear {
+    background: #fee2e2;
+    color: var(--color-high);
+    border: none;
+    border-radius: var(--radius);
+    padding: .5rem .75rem;
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.btn-clear:hover {
+    background: #fecaca;
+}
+
+/* Save / Cancel modal buttons */
+.btn-save {
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: .55rem 1.2rem;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+    transition: background var(--transition);
+}
+
+.btn-save:hover {
+    background: var(--color-accent-hover);
+}
+
+.btn-cancel {
+    background: var(--color-bg);
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: .55rem 1.2rem;
+    font-size: .9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.btn-cancel:hover {
+    background: var(--color-border);
+}
+
+/* Edit / Delete card buttons */
+.btn-edit {
+    background: #e0e7ff;
+    color: var(--color-accent);
+    border: none;
+    border-radius: 6px;
+    padding: .25rem .6rem;
+    font-size: .75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.btn-edit:hover {
+    background: #c7d2fe;
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: var(--color-high);
+    border: none;
+    border-radius: 6px;
+    padding: .25rem .6rem;
+    font-size: .75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.btn-delete:hover {
+    background: #fecaca;
+}
+
+/* ─── 8. Utility classes ─────────────────────── */
+
+/* Completely hide an element (modal overlay, error msg) */
+.hidden {
+    display: none !important;
+}
+
+/* Hide a task card from filter — keeps its space logic intact */
+.is-hidden {
+    display: none !important;
+}
+
+/* Fade-out animation before removing a card */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(.95);
+    }
+}
+
+.fade-out {
+    animation: fadeOut .3s ease forwards;
+}
