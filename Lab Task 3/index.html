@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +8,7 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
+
 <body>
   <div class="container">
     <header class="header">
@@ -16,12 +18,7 @@
 
     <section class="search-section">
       <div class="search-box">
-        <input
-          type="text"
-          id="cityInput"
-          placeholder="Enter city name..."
-          autocomplete="off"
-        />
+        <input type="text" id="cityInput" placeholder="Enter city name..." autocomplete="off" />
         <button id="searchBtn">Search</button>
       </div>
 
@@ -39,73 +36,77 @@
 
       <div class="current-main">
         <div>
-          <h3 id="cityName">City Name</h3>
-          <p id="weatherDescription">Weather description</p>
+          <h3 id="cityName" class="skeleton skeleton-text">City Name</h3>
+          <p id="weatherDescription" class="skeleton skeleton-text short">Weather description</p>
         </div>
         <div class="temp-block">
-          <span id="weatherIcon">☀️</span>
-          <span id="temperature">--°C</span>
+          <span id="weatherIcon" class="skeleton skeleton-icon">☀️</span>
+          <span id="temperature" class="skeleton skeleton-temp">--°C</span>
         </div>
       </div>
 
       <div class="details-grid">
         <div class="detail-item">
           <span class="label">Humidity</span>
-          <span id="humidity">--%</span>
+          <span id="humidity" class="skeleton skeleton-text short">--%</span>
         </div>
         <div class="detail-item">
           <span class="label">Wind</span>
-          <span id="windSpeed">-- km/h</span>
+          <span id="windSpeed" class="skeleton skeleton-text short">-- km/h</span>
         </div>
         <div class="detail-item">
           <span class="label">Local Time</span>
-          <span id="localTime">--:--</span>
+          <span id="localTime" class="skeleton skeleton-text short">--:--</span>
         </div>
       </div>
     </section>
 
-    <section class="forecast-section">
-      <h2>7-Day Forecast</h2>
-      <div id="forecastRow" class="forecast-row">
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
-        <div class="forecast-card card">
-          <p class="forecast-day">Day</p>
-          <p class="forecast-icon">⛅</p>
-          <p class="forecast-temp">--° / --°</p>
-        </div>
+    <div id="forecastRow" class="forecast-row">
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
       </div>
-    </section>
+
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
+      </div>
+
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
+      </div>
+
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
+      </div>
+
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
+      </div>
+
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
+      </div>
+
+      <div class="forecast-card card">
+        <p class="forecast-day skeleton skeleton-text short">Day</p>
+        <p class="forecast-icon skeleton skeleton-icon">⛅</p>
+        <p class="forecast-temp skeleton skeleton-text short">--° / --°</p>
+      </div>
+    </div>
   </div>
 
   <script src="app.js"></script>
 </body>
+
 </html>
