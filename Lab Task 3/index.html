@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeatherNow</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>WeatherNow</h1>
+      <p class="subtitle">Real-Time Weather Dashboard</p>
+    </header>
+
+    <section class="search-section">
+      <div class="search-box">
+        <input
+          type="text"
+          id="cityInput"
+          placeholder="Enter city name..."
+          autocomplete="off"
+        />
+        <button id="searchBtn">Search</button>
+      </div>
+
+      <p id="validationMessage" class="message warning"></p>
+      <div id="recentSearches" class="recent-searches"></div>
+    </section>
+
+    <section id="errorBanner" class="error-banner hidden">
+      <span id="errorText">Something went wrong.</span>
+      <button id="retryBtn">Retry</button>
+    </section>
+
+    <section class="current-weather card">
+      <h2>Current Weather</h2>
+
+      <div class="current-main">
+        <div>
+          <h3 id="cityName">City Name</h3>
+          <p id="weatherDescription">Weather description</p>
+        </div>
+        <div class="temp-block">
+          <span id="weatherIcon">☀️</span>
+          <span id="temperature">--°C</span>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="label">Humidity</span>
+          <span id="humidity">--%</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Wind</span>
+          <span id="windSpeed">-- km/h</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Local Time</span>
+          <span id="localTime">--:--</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="forecast-section">
+      <h2>7-Day Forecast</h2>
+      <div id="forecastRow" class="forecast-row">
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+        <div class="forecast-card card">
+          <p class="forecast-day">Day</p>
+          <p class="forecast-icon">⛅</p>
+          <p class="forecast-temp">--° / --°</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
