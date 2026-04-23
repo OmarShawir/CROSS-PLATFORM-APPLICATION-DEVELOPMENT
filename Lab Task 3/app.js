@@ -1,6 +1,7 @@
 const appState = {
     lastSearchedCity: "",
     lastResolvedTimezone: "",
+    debounceTimer: null,
 };
 
 const weatherCodeMap = {
@@ -163,8 +164,29 @@ async function fetchJson(url) {
     return response.json();
 }
 
+function validateCityInput(city) {
+    if (!city || city.trim().length < 2) {
+        showValidation("Please enter at least 2 characters.");
+        return false;
+    }
+
+    clearValidation();
+    return true;
+}
+
+function triggerSearchFromInput() {
+    const city = document.getElementById("cityInput").value.trim();
+
+    if (!validateCityInput(city)) {
+        return;
+    }
+
+    searchWeather(city);
+}
+
 async function searchWeather(city) {
     appState.lastSearchedCity = city;
+    document.getElementById("cityInput").value = city;
     hideError();
     clearValidation();
     resetWeatherUI();
@@ -209,14 +231,36 @@ async function searchWeather(city) {
 }
 
 document.getElementById("searchBtn").addEventListener("click", () => {
+    triggerSearchFromInput();
+});
+
+document.getElementById("cityInput").addEventListener("input", () => {
     const city = document.getElementById("cityInput").value.trim();
 
-    if (city.length < 2) {
+    if (appState.debounceTimer) {
+        clearTimeout(appState.debounceTimer);
+    }
+
+    if (!city) {
         showValidation("Please enter at least 2 characters.");
         return;
     }
 
-    searchWeather(city);
+    appState.debounceTimer = setTimeout(() => {
+        if (validateCityInput(city)) {
+            searchWeather(city);
+        }
+    }, 500);
+});
+
+document.getElementById("cityInput").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        if (appState.debounceTimer) {
+            clearTimeout(appState.debounceTimer);
+        }
+
+        triggerSearchFromInput();
+    }
 });
 
 document.getElementById("retryBtn").addEventListener("click", () => {
