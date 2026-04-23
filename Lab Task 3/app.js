@@ -200,6 +200,7 @@ async function searchWeather(city) {
 
         populateCurrentWeather(resolvedName, weatherData);
         populateForecast(weatherData);
+        fetchLocalTime(appState.lastResolvedTimezone);
         removeAllSkeletons();
     } catch (error) {
         removeAllSkeletons();
@@ -223,5 +224,29 @@ document.getElementById("retryBtn").addEventListener("click", () => {
         searchWeather(appState.lastSearchedCity);
     }
 });
+
+function fetchLocalTime(timezone) {
+    if (!timezone) {
+        $("#localTime").text("--:--");
+        return;
+    }
+
+    const url = `https://timeapi.io/api/Time/current/zone?timeZone=${encodeURIComponent(timezone)}`;
+
+    $.ajax({
+        url: url,
+        method: "GET"
+    })
+        .done(function (data) {
+            const time = data.time || "--:--";
+            $("#localTime").text(time);
+        })
+        .fail(function () {
+            $("#localTime").text("N/A");
+        })
+        .always(function () {
+            console.log("Local time request finished");
+        });
+}
 
 console.log("WeatherNow app initialized");
