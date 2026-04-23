@@ -2,6 +2,7 @@ const appState = {
     lastSearchedCity: "",
     lastResolvedTimezone: "",
     debounceTimer: null,
+    recentSearches: []
 };
 
 const weatherCodeMap = {
@@ -184,9 +185,56 @@ function triggerSearchFromInput() {
     searchWeather(city);
 }
 
+function loadRecentSearches() {
+    const saved = localStorage.getItem("weathernowRecentSearches");
+
+    if (saved) {
+        appState.recentSearches = JSON.parse(saved);
+    }
+
+    renderRecentSearches();
+}
+
+function saveRecentSearch(city) {
+    const normalizedCity = city.trim();
+
+    appState.recentSearches = appState.recentSearches.filter(
+        (item) => item.toLowerCase() !== normalizedCity.toLowerCase()
+    );
+
+    appState.recentSearches.unshift(normalizedCity);
+    appState.recentSearches = appState.recentSearches.slice(0, 5);
+
+    localStorage.setItem(
+        "weathernowRecentSearches",
+        JSON.stringify(appState.recentSearches)
+    );
+
+    renderRecentSearches();
+}
+
+function renderRecentSearches() {
+    const container = document.getElementById("recentSearches");
+    container.innerHTML = "";
+
+    appState.recentSearches.forEach((city) => {
+        const button = document.createElement("button");
+        button.textContent = city;
+        button.className = "recent-chip";
+
+        button.addEventListener("click", () => {
+            document.getElementById("cityInput").value = city;
+            searchWeather(city);
+        });
+
+        container.appendChild(button);
+    });
+}
+
 async function searchWeather(city) {
     appState.lastSearchedCity = city;
     document.getElementById("cityInput").value = city;
+    saveRecentSearch(city);
     hideError();
     clearValidation();
     resetWeatherUI();
@@ -293,4 +341,5 @@ function fetchLocalTime(timezone) {
         });
 }
 
+loadRecentSearches();
 console.log("WeatherNow app initialized");

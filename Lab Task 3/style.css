@@ -237,3 +237,17 @@ body {
   height: 36px;
   border-radius: 50%;
 }
+
+.recent-chip {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 999px;
+  background: #dcecff;
+  color: #1f4e79;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.recent-chip:hover {
+  background: #bfdcff;
+}
