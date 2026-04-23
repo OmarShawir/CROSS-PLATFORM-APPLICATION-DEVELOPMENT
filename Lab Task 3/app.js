@@ -134,16 +134,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Extracts relative humidity for the current hour
     function getHumidityForCurrentHour(weatherData) {
-        const currentTime = weatherData.current_weather.time;
+        const currentTime = new Date(weatherData.current_weather.time).getTime();
         const hourlyTimes = weatherData.hourly.time;
         const humidityValues = weatherData.hourly.relativehumidity_2m;
 
-        const index = hourlyTimes.indexOf(currentTime);
-        if (index === -1) {
+        let closestIndex = -1;
+        let smallestDiff = Infinity;
+
+        hourlyTimes.forEach((time, index) => {
+            const hourlyTime = new Date(time).getTime();
+            const diff = Math.abs(hourlyTime - currentTime);
+
+            if (diff < smallestDiff) {
+                smallestDiff = diff;
+                closestIndex = index;
+            }
+        });
+
+        if (closestIndex === -1) {
             return "--";
         }
 
-        return humidityValues[index];
+        return humidityValues[closestIndex];
     }
 
     // Converts Celsius to Fahrenheit
