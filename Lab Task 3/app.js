@@ -2,7 +2,10 @@ const appState = {
     lastSearchedCity: "",
     lastResolvedTimezone: "",
     debounceTimer: null,
-    recentSearches: []
+    recentSearches: [],
+    unit: "C",
+    lastWeatherData: null,
+    lastResolvedName: ""
 };
 
 const weatherCodeMap = {
@@ -124,6 +127,18 @@ function getHumidityForCurrentHour(weatherData) {
     return humidityValues[index];
 }
 
+function convertCtoF(tempC) {
+    return (tempC * 9) / 5 + 32;
+}
+
+function formatTemperature(tempC) {
+    if (appState.unit === "F") {
+        return `${Math.round(convertCtoF(tempC))}°F`;
+    }
+
+    return `${Math.round(tempC)}°C`;
+}
+
 function populateCurrentWeather(cityName, weatherData) {
     const current = weatherData.current_weather;
     const humidity = getHumidityForCurrentHour(weatherData);
@@ -132,7 +147,7 @@ function populateCurrentWeather(cityName, weatherData) {
     document.getElementById("cityName").textContent = cityName;
     document.getElementById("weatherDescription").textContent = weatherMeta.text;
     document.getElementById("weatherIcon").textContent = weatherMeta.icon;
-    document.getElementById("temperature").textContent = `${Math.round(current.temperature)}°C`;
+    document.getElementById("temperature").textContent = formatTemperature(current.temperature);
     document.getElementById("humidity").textContent = `${humidity}%`;
     document.getElementById("windSpeed").textContent = `${Math.round(current.windspeed)} km/h`;
 }
@@ -151,7 +166,7 @@ function populateForecast(weatherData) {
         card.querySelector(".forecast-day").textContent = dayName;
         card.querySelector(".forecast-icon").textContent = weatherMeta.icon;
         card.querySelector(".forecast-temp").textContent =
-            `${Math.round(maxTemps[index])}° / ${Math.round(minTemps[index])}°`;
+            `${formatTemperature(maxTemps[index])} / ${formatTemperature(minTemps[index])}`;
     });
 }
 
@@ -267,6 +282,8 @@ async function searchWeather(city) {
             `&timezone=auto`;
 
         const weatherData = await fetchJson(weatherUrl);
+        appState.lastWeatherData = weatherData;
+        appState.lastResolvedName = resolvedName;
 
         populateCurrentWeather(resolvedName, weatherData);
         populateForecast(weatherData);
@@ -340,6 +357,28 @@ function fetchLocalTime(timezone) {
             console.log("Local time request finished");
         });
 }
+
+document.getElementById("celsiusBtn").addEventListener("click", () => {
+    appState.unit = "C";
+    document.getElementById("celsiusBtn").classList.add("active-unit");
+    document.getElementById("fahrenheitBtn").classList.remove("active-unit");
+
+    if (appState.lastWeatherData) {
+        populateCurrentWeather(appState.lastResolvedName, appState.lastWeatherData);
+        populateForecast(appState.lastWeatherData);
+    }
+});
+
+document.getElementById("fahrenheitBtn").addEventListener("click", () => {
+    appState.unit = "F";
+    document.getElementById("fahrenheitBtn").classList.add("active-unit");
+    document.getElementById("celsiusBtn").classList.remove("active-unit");
+
+    if (appState.lastWeatherData) {
+        populateCurrentWeather(appState.lastResolvedName, appState.lastWeatherData);
+        populateForecast(appState.lastWeatherData);
+    }
+});
 
 loadRecentSearches();
 console.log("WeatherNow app initialized");

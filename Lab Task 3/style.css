@@ -251,3 +251,24 @@ body {
 .recent-chip:hover {
   background: #bfdcff;
 }
+
+.unit-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.unit-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  background: #d9e8f7;
+  color: #1f4e79;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.active-unit {
+  background: #2e75b6;
+  color: white;
+}
